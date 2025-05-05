@@ -1,7 +1,7 @@
 import { Router } from "express";
 import {
-  getAllCategories,
-  getCategory,
+  getCategoriesController,
+  getCategoryByIdController,
   createCategoryController,
   updateCategoryController,
   deleteCategoryController,
@@ -9,8 +9,8 @@ import {
 
 const router = Router();
 
-router.get("/", getAllCategories);
-router.get("/:id", getCategory);
+router.get("/", getCategoriesController);
+router.get("/:id", getCategoryByIdController);
 router.post("/", createCategoryController);
 router.put("/:id", updateCategoryController);
 router.delete("/:id", deleteCategoryController);

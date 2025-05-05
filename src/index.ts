@@ -1,12 +1,14 @@
 import 'dotenv/config'; // precisa vir antes de tudo
 import express from 'express';
 import categoryRouter from './routes/categoryRoutes';
+import authorRouter from './routes/authorRoutes'
 import { AppDataSource } from './config/dataSource';
 
 const app = express();
 app.use(express.json());
 
 app.use('/category', categoryRouter);
+app.use('/author', authorRouter)
 
 AppDataSource.initialize()
   .then(() => {

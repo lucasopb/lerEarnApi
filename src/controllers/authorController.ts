@@ -46,7 +46,7 @@ export const updateAuthorController = async (req: Request, res: Response, next: 
   }
 };
 
-export const deleteCategoryController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const deleteAuthorController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { id } = req.params;
     await deleteAuthor(id);
