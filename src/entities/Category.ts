@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { Book } from "./Book";
 
 @Entity()
@@ -6,12 +6,18 @@ export class Category {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
-  @Column()
+  @Column({ unique: true })
   name!: string;
 
-  @Column()
+  @Column('text')
   description!: string;
 
-  @OneToMany(() => Book, book => book.category)
+  @OneToMany(() => Book, book => book.category, { cascade: true })
   books!: Book[];
+
+  @CreateDateColumn()
+  created_at!: Date;
+
+  @UpdateDateColumn()
+  updated_at!: Date;
 }
