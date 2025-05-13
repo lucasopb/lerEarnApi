@@ -3,12 +3,14 @@ import express from 'express';
 import categoryRouter from './routes/categoryRoutes';
 import authorRouter from './routes/authorRoutes'
 import { AppDataSource } from './config/dataSource';
+import bookRouter from './routes/bookRoutes'
 
 const app = express();
 app.use(express.json());
 
-app.use('/category', categoryRouter);
-app.use('/author', authorRouter)
+app.use('/categories', categoryRouter);
+app.use('/authors', authorRouter);
+app.use('/books', bookRouter);
 
 AppDataSource.initialize()
   .then(() => {
