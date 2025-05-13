@@ -50,7 +50,7 @@ export const deleteBookController = async (req: Request, res: Response, next: Ne
   try {
     const { id } = req.params;
     await deleteBook(id);
-    res.status(204).send();
+    res.status(200).json({ message: "Livro deletado com sucesso" });
   } catch (error) {
     next(error);
   }

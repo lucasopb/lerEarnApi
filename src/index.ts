@@ -1,12 +1,17 @@
 import 'dotenv/config'; // precisa vir antes de tudo
 import express from 'express';
+import swaggerUi from 'swagger-ui-express';
 import categoryRouter from './routes/categoryRoutes';
 import authorRouter from './routes/authorRoutes'
 import { AppDataSource } from './config/dataSource';
 import bookRouter from './routes/bookRoutes'
+import { swaggerSpec } from './config/swagger';
 
 const app = express();
 app.use(express.json());
+
+// Configuração do Swagger
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use('/categories', categoryRouter);
 app.use('/authors', authorRouter);
@@ -23,4 +28,5 @@ AppDataSource.initialize()
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
+  console.log(`Documentação Swagger disponível em: http://localhost:${PORT}/api-docs`);
 });

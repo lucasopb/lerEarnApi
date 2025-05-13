@@ -50,7 +50,7 @@ export const deleteCategoryController = async (req: Request, res: Response, next
   try {
     const { id } = req.params;
     await deleteCategory(id);
-    res.status(204).send();
+    res.status(200).json({ message: "Categoria deletada com sucesso" });
   } catch (error) {
     next(error);
   }

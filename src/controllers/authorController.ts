@@ -50,7 +50,7 @@ export const deleteAuthorController = async (req: Request, res: Response, next: 
   try {
     const { id } = req.params;
     await deleteAuthor(id);
-    res.status(204).send();
+    res.status(200).json({ message: "Autor deletado com sucesso" });
   } catch (error) {
     next(error);
   }
