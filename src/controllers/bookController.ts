@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { createBook, getBooks, getBookById, updateBook, deleteBook } from "../repository/bookRepository";
+import { CreateBookDto, UpdateBookDto } from "../dtos/book.dto";
 
 export const getBooksController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
@@ -15,7 +16,7 @@ export const getBookByIdController = async (req: Request, res: Response, next: N
     const { id } = req.params;
     const book = await getBookById(id);
     if (!book) {
-      res.status(404).json({ message: "Livro não encontrado" });
+      res.status(404).json({ message: "Book not found" });
       return;
     }
     res.status(200).json(book);
@@ -26,8 +27,8 @@ export const getBookByIdController = async (req: Request, res: Response, next: N
 
 export const createBookController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const { title, description, publication_year, url_download, author_id, category_id } = req.body;
-    const newBook = await createBook(title, description, publication_year, url_download, author_id, category_id);
+    const bookDto: CreateBookDto = req.body;
+    const newBook = await createBook(bookDto);
     res.status(201).json(newBook);
   } catch (error) {
     next(error);
@@ -37,9 +38,8 @@ export const createBookController = async (req: Request, res: Response, next: Ne
 export const updateBookController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { id } = req.params;
-    const { title, description, publication_year, url_download, author_id, category_id } = req.body;
-
-    const updatedBook = await updateBook(id, title, description, publication_year, url_download, author_id, category_id);
+    const bookDto: UpdateBookDto = req.body;
+    const updatedBook = await updateBook(id, bookDto);
     res.status(200).json(updatedBook);
   } catch (error) {
     next(error);
@@ -50,7 +50,7 @@ export const deleteBookController = async (req: Request, res: Response, next: Ne
   try {
     const { id } = req.params;
     await deleteBook(id);
-    res.status(200).json({ message: "Livro deletado com sucesso" });
+    res.status(204).send();
   } catch (error) {
     next(error);
   }

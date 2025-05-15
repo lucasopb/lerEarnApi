@@ -1,10 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 import { createAuthor, getAuthor, getAuthorById, updateAuthor, deleteAuthor } from "../repository/authorRepository";
+import { CreateAuthorDto, UpdateAuthorDto } from "../dtos/author.dto";
 
 export const getAuthorController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const author = await getAuthor();
-    res.status(200).json(author);
+    const authors = await getAuthor();
+    res.status(200).json(authors);
   } catch (error) {
     next(error);
   }
@@ -26,8 +27,8 @@ export const getAuthorByIdController = async (req: Request, res: Response, next:
 
 export const createAuthorController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const { name, nationality, birthDate, biography } = req.body;
-    const newAuthor = await createAuthor(name, nationality, birthDate, biography);
+    const authorDto: CreateAuthorDto = req.body;
+    const newAuthor = await createAuthor(authorDto);
     res.status(201).json(newAuthor);
   } catch (error) {
     next(error);
@@ -37,10 +38,9 @@ export const createAuthorController = async (req: Request, res: Response, next: 
 export const updateAuthorController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { id } = req.params;
-    const { name, nationality, birthDate, biography } = req.body;
-
-    const updatedCategory = await updateAuthor(id, name, nationality, birthDate, biography);
-    res.status(200).json(updatedCategory);
+    const authorDto: UpdateAuthorDto = req.body;
+    const updatedAuthor = await updateAuthor(id, authorDto);
+    res.status(200).json(updatedAuthor);
   } catch (error) {
     next(error);
   }
@@ -50,7 +50,7 @@ export const deleteAuthorController = async (req: Request, res: Response, next: 
   try {
     const { id } = req.params;
     await deleteAuthor(id);
-    res.status(200).json({ message: "Autor deletado com sucesso" });
+    res.status(204).send();
   } catch (error) {
     next(error);
   }

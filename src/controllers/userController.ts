@@ -1,17 +1,18 @@
-import { Request, Response, NextFunction } from 'express';
-import { registerUser, loginUser, getMe } from '../repository/userRepository';
+import { NextFunction, Request, Response } from "express";
+import { registerUser, loginUser, updateUser, deleteUser } from "../repository/userRepository";
+import { CreateUserDto, UpdateUserDto } from "../dtos/user.dto";
 
-export const signUpController = async (req: Request, res: Response, next: NextFunction) => {
+export const registerController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const { name, email, password } = req.body;
-    const user = await registerUser(name, email, password);
-    res.status(201).json(user);
+    const userDto: CreateUserDto = req.body;
+    const result = await registerUser(userDto);
+    res.status(201).json(result);
   } catch (error) {
     next(error);
   }
 };
 
-export const loginController = async (req: Request, res: Response, next: NextFunction) => {
+export const loginController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { email, password } = req.body;
     const result = await loginUser(email, password);
@@ -21,10 +22,22 @@ export const loginController = async (req: Request, res: Response, next: NextFun
   }
 };
 
-export const getUserController = async (req: Request, res: Response, next: NextFunction) => {
+export const updateUserController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const user = await getMe((req as any).user.id);
-    res.json(user);
+    const { id } = req.params;
+    const userDto: UpdateUserDto = req.body;
+    const updatedUser = await updateUser(id, userDto);
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteUserController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const { id } = req.params;
+    await deleteUser(id);
+    res.status(204).send();
   } catch (error) {
     next(error);
   }
