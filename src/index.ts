@@ -3,6 +3,7 @@ import express from 'express';
 import swaggerUi from 'swagger-ui-express';
 import categoryRouter from './routes/categoryRoutes';
 import authorRouter from './routes/authorRoutes'
+import userRouter from './routes/userRoutes'
 import { AppDataSource } from './config/dataSource';
 import bookRouter from './routes/bookRoutes'
 import { swaggerSpec } from './config/swagger';
@@ -16,6 +17,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/categories', categoryRouter);
 app.use('/authors', authorRouter);
 app.use('/books', bookRouter);
+app.use('/auth', userRouter)
 
 AppDataSource.initialize()
   .then(() => {
