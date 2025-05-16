@@ -3,6 +3,7 @@ import { Book } from "../entities/Book";
 import { Author } from "../entities/Author";
 import { Category } from "../entities/Category";
 import { User } from "../entities/User";
+import { Review } from "../entities/Review";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -13,7 +14,7 @@ export const AppDataSource = new DataSource({
   database: "meubanco",
   synchronize: true,
   logging: false,
-  entities: [Book, Author, User, Category],
+  entities: [Book, Author, User, Category, Review],
   migrations: ["src/migrations/**/*.ts"],
 });
 

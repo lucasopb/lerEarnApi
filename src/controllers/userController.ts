@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { registerUser, loginUser, updateUser, deleteUser } from "../repository/userRepository";
+import { registerUser, loginUser, updateUser, deleteUser, getAllUsers } from "../repository/userRepository";
 import { CreateUserDto, UpdateUserDto } from "../dtos/user.dto";
 
 export const registerController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -38,6 +38,15 @@ export const deleteUserController = async (req: Request, res: Response, next: Ne
     const { id } = req.params;
     await deleteUser(id);
     res.status(204).send();
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getAllUsersController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const users = await getAllUsers();
+    res.status(200).json(users);
   } catch (error) {
     next(error);
   }

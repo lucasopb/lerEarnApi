@@ -55,6 +55,25 @@ const options = {
             category: { $ref: '#/components/schemas/Category' },
           },
         },
+        Review: {
+          type: 'object',
+          properties: {
+            id: { type: 'string', format: 'uuid' },
+            rating: { type: 'integer', minimum: 1, maximum: 5 },
+            comment: { type: 'string' },
+            user: { $ref: '#/components/schemas/User' },
+            book: { $ref: '#/components/schemas/Book' },
+            createdAt: { type: 'string', format: 'date-time' },
+            updatedAt: { type: 'string', format: 'date-time' },
+          },
+        },
+      },
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
       },
     },
     paths: {
@@ -494,6 +513,137 @@ const options = {
                   }
                 }
               }
+            },
+          },
+        },
+      },
+      '/reviews': {
+        post: {
+          summary: 'Cria uma nova avaliação',
+          security: [{ bearerAuth: [] }],
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    rating: { type: 'integer', minimum: 1, maximum: 5 },
+                    comment: { type: 'string' },
+                    bookId: { type: 'string', format: 'uuid' },
+                  },
+                  required: ['rating', 'bookId'],
+                },
+              },
+            },
+          },
+          responses: {
+            '201': {
+              description: 'Avaliação criada com sucesso',
+              content: {
+                'application/json': {
+                  schema: { $ref: '#/components/schemas/Review' },
+                },
+              },
+            },
+            '401': {
+              description: 'Não autorizado',
+            },
+          },
+        },
+      },
+      '/reviews/{id}': {
+        put: {
+          summary: 'Atualiza uma avaliação',
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            {
+              name: 'id',
+              in: 'path',
+              required: true,
+              schema: { type: 'string', format: 'uuid' },
+            },
+          ],
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    rating: { type: 'integer', minimum: 1, maximum: 5 },
+                    comment: { type: 'string' },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            '200': {
+              description: 'Avaliação atualizada com sucesso',
+              content: {
+                'application/json': {
+                  schema: { $ref: '#/components/schemas/Review' },
+                },
+              },
+            },
+            '401': {
+              description: 'Não autorizado',
+            },
+            '404': {
+              description: 'Avaliação não encontrada',
+            },
+          },
+        },
+        delete: {
+          summary: 'Remove uma avaliação',
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            {
+              name: 'id',
+              in: 'path',
+              required: true,
+              schema: { type: 'string', format: 'uuid' },
+            },
+          ],
+          responses: {
+            '200': {
+              description: 'Avaliação removida com sucesso',
+            },
+            '401': {
+              description: 'Não autorizado',
+            },
+            '404': {
+              description: 'Avaliação não encontrada',
+            },
+          },
+        },
+      },
+      '/reviews/book/{bookId}': {
+        get: {
+          summary: 'Lista todas as avaliações de um livro',
+          parameters: [
+            {
+              name: 'bookId',
+              in: 'path',
+              required: true,
+              schema: { type: 'string', format: 'uuid' },
+            },
+          ],
+          responses: {
+            '200': {
+              description: 'Lista de avaliações do livro',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'array',
+                    items: { $ref: '#/components/schemas/Review' },
+                  },
+                },
+              },
+            },
+            '404': {
+              description: 'Livro não encontrado',
             },
           },
         },

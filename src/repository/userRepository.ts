@@ -6,6 +6,15 @@ import { CreateUserDto, UpdateUserDto, UserResponseDto } from '../dtos/user.dto'
 
 const repository = AppDataSource.getRepository(User);
 
+export const getAllUsers = async (): Promise<UserResponseDto[]> => {
+  const users = await repository.find();
+  return users.map(user => ({
+    id: user.id,
+    name: user.name,
+    email: user.email
+  }));
+};
+
 export const registerUser = async (userDto: CreateUserDto): Promise<{ user: UserResponseDto; token: string }> => {
   const existingUser = await repository.findOne({ where: { email: userDto.email } });
   if (existingUser) throw new Error('Email já cadastrado');

@@ -6,6 +6,7 @@ import authorRouter from './routes/authorRoutes'
 import userRouter from './routes/userRoutes'
 import { AppDataSource } from './config/dataSource';
 import bookRouter from './routes/bookRoutes'
+import reviewRouter from './routes/reviewRoutes'
 import { swaggerSpec } from './config/swagger';
 
 const app = express();
@@ -17,7 +18,8 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/categories', categoryRouter);
 app.use('/authors', authorRouter);
 app.use('/books', bookRouter);
-app.use('/auth', userRouter)
+app.use('/users', userRouter);
+app.use('/reviews', reviewRouter);
 
 AppDataSource.initialize()
   .then(() => {
