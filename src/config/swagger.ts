@@ -6,7 +6,7 @@ const options = {
     info: {
       title: 'LerEarn API',
       version: '1.0.0',
-      description: 'API para gerenciamento de livros, autores e categorias',
+      description: 'API para gerenciamento de livros, autores, categorias e usuários',
     },
     servers: [
       {
@@ -16,6 +16,15 @@ const options = {
     ],
     components: {
       schemas: {
+        User: {
+          type: 'object',
+          properties: {
+            id: { type: 'string', format: 'uuid' },
+            email: { type: 'string', format: 'email' },
+            password: { type: 'string' },
+            name: { type: 'string' },
+          },
+        },
         Author: {
           type: 'object',
           properties: {
@@ -49,6 +58,116 @@ const options = {
       },
     },
     paths: {
+      '/users': {
+        get: {
+          summary: 'Lista todos os usuários',
+          responses: {
+            '200': {
+              description: 'Lista de usuários',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'array',
+                    items: { $ref: '#/components/schemas/User' },
+                  },
+                },
+              },
+            },
+          },
+        },
+        post: {
+          summary: 'Cria um novo usuário',
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/User' },
+              },
+            },
+          },
+          responses: {
+            '201': {
+              description: 'Usuário criado com sucesso',
+            },
+          },
+        },
+      },
+      '/users/{id}': {
+        get: {
+          summary: 'Obtém um usuário específico',
+          parameters: [
+            {
+              name: 'id',
+              in: 'path',
+              required: true,
+              schema: { type: 'string', format: 'uuid' },
+            },
+          ],
+          responses: {
+            '200': {
+              description: 'Usuário encontrado',
+              content: {
+                'application/json': {
+                  schema: { $ref: '#/components/schemas/User' },
+                },
+              },
+            },
+          },
+        },
+        put: {
+          summary: 'Atualiza um usuário',
+          parameters: [
+            {
+              name: 'id',
+              in: 'path',
+              required: true,
+              schema: { type: 'string', format: 'uuid' },
+            },
+          ],
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/User' },
+              },
+            },
+          },
+          responses: {
+            '200': {
+              description: 'Usuário atualizado com sucesso',
+            },
+          },
+        },
+        delete: {
+          summary: 'Remove um usuário',
+          parameters: [
+            {
+              name: 'id',
+              in: 'path',
+              required: true,
+              schema: { type: 'string', format: 'uuid' },
+            },
+          ],
+          responses: {
+            '200': {
+              description: 'Usuário removido com sucesso',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      message: {
+                        type: 'string',
+                        example: 'Usuário deletado com sucesso'
+                      }
+                    }
+                  }
+                }
+              }
+            },
+          },
+        },
+      },
       '/authors': {
         get: {
           summary: 'Lista todos os autores',

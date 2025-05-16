@@ -29,6 +29,9 @@ AppDataSource.initialize()
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
-  console.log(`Documentação Swagger disponível em: http://localhost:${PORT}/api-docs`);
+  console.log('\n🚀 Servidor iniciado com sucesso!');
+  console.log('----------------------------------------');
+  console.log(`📚 Documentação Swagger disponível em:`);
+  console.log(`🔗 http://localhost:${PORT}/api-docs`);
+  console.log('----------------------------------------\n');
 });
